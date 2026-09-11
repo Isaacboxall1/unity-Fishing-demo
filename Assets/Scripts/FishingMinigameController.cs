@@ -41,6 +41,12 @@ public class FishingMinigameController : MonoBehaviour
     [SerializeField]
     private float MaxTargetChangeDelay = 1.5f;
 
+    [SerializeField]
+    private float progressGainRate = 0.25f;
+
+    [SerializeField]
+    private float progressLossRate = 0.15f;
+
     /** Private Variables **/
 
     private float catchBarVelocity = 0f;
@@ -48,6 +54,8 @@ public class FishingMinigameController : MonoBehaviour
     private float fishTargetY = 0f;
 
     private bool isMinigameActive = false;
+
+    private float catchProgress = 0.5f;
 
     /** Lifecycle Functions **/
 
@@ -60,6 +68,7 @@ public class FishingMinigameController : MonoBehaviour
 
         UpdateCatchBar();
         UpdateFish();
+        UpdateCatchProgress();
     }
 
     /** Public Methods **/
@@ -67,8 +76,9 @@ public class FishingMinigameController : MonoBehaviour
     {
         fish.anchoredPosition = new Vector2(0f, 0f);
         catchBar.anchoredPosition = new Vector2(0f, 0f);
-        progressFill.fillAmount = 0.5f;
         catchBarVelocity = 0f;
+        catchProgress = 0.5f;
+        progressFill.fillAmount = catchProgress;
 
         isMinigameActive = true;
 
@@ -81,27 +91,6 @@ public class FishingMinigameController : MonoBehaviour
     }
 
     /** Private Helpers **/
-
-    private Vector2 calculateCatchBarYBounds()
-    {
-        return calculateImageYBounds(catchBar);
-    }
-
-    private Vector2 calculateFishYBounds()
-    {
-        return calculateImageYBounds(fish);
-    }
-
-    private Vector2 calculateImageYBounds(RectTransform Image)
-    {
-        float trackHeight = fishingTrack.rect.height / 2;
-        float imageHeight = Image.rect.height / 2;
-        float maxY = trackHeight - imageHeight;
-        float minY = -maxY;
-
-        return new Vector2(minY, maxY);
-    }
-
     private void UpdateCatchBar()
     {
         if (Keyboard.current.spaceKey.isPressed)
@@ -134,6 +123,43 @@ public class FishingMinigameController : MonoBehaviour
         float updatedFishY = Mathf.MoveTowards(currentFishY, fishTargetY, fishMoveSpeed * Time.deltaTime);
         fish.anchoredPosition = new Vector2(fish.anchoredPosition.x, updatedFishY);
     }
+    private void UpdateCatchProgress()
+    {
+        if (IsFishInsideCatchBar())
+        {
+            Debug.Log("Fish Inside Catch Bar!");
+            catchProgress += progressGainRate * Time.deltaTime;
+        }
+        else
+        {
+            Debug.Log("Fish not Inside Catch Bar :(");
+            catchProgress -= progressLossRate * Time.deltaTime;
+        }
+
+        catchProgress = Mathf.Clamp(catchProgress, 0f, 1f);
+
+        progressFill.fillAmount = catchProgress;
+    }
+
+    private Vector2 calculateCatchBarYBounds()
+    {
+        return calculateImageYBounds(catchBar);
+    }
+
+    private Vector2 calculateFishYBounds()
+    {
+        return calculateImageYBounds(fish);
+    }
+
+    private Vector2 calculateImageYBounds(RectTransform Image)
+    {
+        float trackHeight = fishingTrack.rect.height / 2;
+        float imageHeight = Image.rect.height / 2;
+        float maxY = trackHeight - imageHeight;
+        float minY = -maxY;
+
+        return new Vector2(minY, maxY);
+    }
 
     private void ChooseFishTarget()
     {
@@ -151,5 +177,16 @@ public class FishingMinigameController : MonoBehaviour
 
             yield return new WaitForSeconds(waitTime);
         }
+    }
+    private bool IsFishInsideCatchBar()
+    {
+        float fishTop = fish.anchoredPosition.y + fish.rect.height / 2;
+        float fishBottom = fish.anchoredPosition.x - fish.rect.height / 2;
+
+        float catchBarHeight = catchBar.rect.height / 2;
+        float catchBarTop = catchBar.anchoredPosition.y + catchBar.rect.height / 2;
+        float catchBarBottom = catchBar.anchoredPosition.y - catchBar.rect.height / 2;
+
+        return (fishTop >= catchBarBottom) && (fishBottom <= catchBarTop);
     }
 }
