@@ -181,7 +181,7 @@ public class FishingMinigameController : MonoBehaviour
     private bool IsFishInsideCatchBar()
     {
         float fishTop = fish.anchoredPosition.y + fish.rect.height / 2;
-        float fishBottom = fish.anchoredPosition.x - fish.rect.height / 2;
+        float fishBottom = fish.anchoredPosition.y - fish.rect.height / 2;
 
         float catchBarHeight = catchBar.rect.height / 2;
         float catchBarTop = catchBar.anchoredPosition.y + catchBar.rect.height / 2;
