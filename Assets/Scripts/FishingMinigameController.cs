@@ -2,9 +2,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class FishingMinigameController : MonoBehaviour
 {
+    /** Events **/
+
+    public event Action<bool> MinigameFinished;
+
     /** Component References **/
 
     [SerializeField]
@@ -39,7 +44,7 @@ public class FishingMinigameController : MonoBehaviour
     private float minTargetChangeDelay = 0.5f;
 
     [SerializeField]
-    private float MaxTargetChangeDelay = 1.5f;
+    private float maxTargetChangeDelay = 1.5f;
 
     [SerializeField]
     private float progressGainRate = 0.25f;
@@ -90,6 +95,12 @@ public class FishingMinigameController : MonoBehaviour
         isMinigameActive = false;
     }
 
+    private void FinishMinigame(bool success)
+    {
+        StopMinigame();
+        MinigameFinished?.Invoke(success);
+    }
+
     /** Private Helpers **/
     private void UpdateCatchBar()
     {
@@ -102,11 +113,11 @@ public class FishingMinigameController : MonoBehaviour
             catchBarVelocity -= gravity * Time.deltaTime;
         }
 
-        catchBarVelocity = Mathf.Clamp(catchBarVelocity, 0f, maxSpeed);
+        catchBarVelocity = Mathf.Clamp(catchBarVelocity, -maxSpeed, maxSpeed);
 
         float currentY = catchBar.anchoredPosition.y;
         float desiredYPosition = currentY + catchBarVelocity * Time.deltaTime;
-        Vector2 catchBarYBounds = calculateCatchBarYBounds();
+        Vector2 catchBarYBounds = CalculateCatchBarYBounds();
 
         float newY = Mathf.Clamp(desiredYPosition, catchBarYBounds.x, catchBarYBounds.y);
 
@@ -129,31 +140,38 @@ public class FishingMinigameController : MonoBehaviour
     {
         if (IsFishInsideCatchBar())
         {
-            Debug.Log("Fish Inside Catch Bar!");
             catchProgress += progressGainRate * Time.deltaTime;
         }
         else
         {
-            Debug.Log("Fish not Inside Catch Bar :(");
             catchProgress -= progressLossRate * Time.deltaTime;
         }
 
         catchProgress = Mathf.Clamp(catchProgress, 0f, 1f);
 
         progressFill.fillAmount = catchProgress;
+
+        if (catchProgress >= 1f)
+        {
+            FinishMinigame(true);
+        }
+        else if (catchProgress <= 0f)
+        {
+            FinishMinigame(false);
+        }
     }
 
-    private Vector2 calculateCatchBarYBounds()
+    private Vector2 CalculateCatchBarYBounds()
     {
-        return calculateImageYBounds(catchBar);
+        return CalculateImageYBounds(catchBar);
     }
 
-    private Vector2 calculateFishYBounds()
+    private Vector2 CalculateFishYBounds()
     {
-        return calculateImageYBounds(fish);
+        return CalculateImageYBounds(fish);
     }
 
-    private Vector2 calculateImageYBounds(RectTransform Image)
+    private Vector2 CalculateImageYBounds(RectTransform Image)
     {
         float trackHeight = fishingTrack.rect.height / 2;
         float imageHeight = Image.rect.height / 2;
@@ -165,8 +183,8 @@ public class FishingMinigameController : MonoBehaviour
 
     private void ChooseFishTarget()
     {
-        Vector2 fishBounds = calculateFishYBounds();
-        fishTargetY = Random.Range(fishBounds.x, fishBounds.y);
+        Vector2 fishBounds = CalculateFishYBounds();
+        fishTargetY = UnityEngine.Random.Range(fishBounds.x, fishBounds.y);
     }
 
     private IEnumerator UpdateFishTarget()
@@ -175,7 +193,7 @@ public class FishingMinigameController : MonoBehaviour
         {
             ChooseFishTarget();
 
-            float waitTime = Random.Range(minTargetChangeDelay, MaxTargetChangeDelay);
+            float waitTime = UnityEngine.Random.Range(minTargetChangeDelay, maxTargetChangeDelay);
 
             yield return new WaitForSeconds(waitTime);
         }
@@ -185,7 +203,6 @@ public class FishingMinigameController : MonoBehaviour
         float fishTop = fish.anchoredPosition.y + fish.rect.height / 2;
         float fishBottom = fish.anchoredPosition.y - fish.rect.height / 2;
 
-        float catchBarHeight = catchBar.rect.height / 2;
         float catchBarTop = catchBar.anchoredPosition.y + catchBar.rect.height / 2;
         float catchBarBottom = catchBar.anchoredPosition.y - catchBar.rect.height / 2;
 

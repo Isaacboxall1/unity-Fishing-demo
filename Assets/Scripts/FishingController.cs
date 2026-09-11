@@ -114,5 +114,25 @@ public class FishingController : MonoBehaviour
         Debug.Log("Starting fishing minigame");
         minigameController.gameObject.SetActive(true);
         minigameController.StartMinigame();
+        minigameController.MinigameFinished += HandleMinigameFinished;
+
+    }
+    private void HandleMinigameFinished(bool success)
+    {
+        minigameController.MinigameFinished -= HandleMinigameFinished;
+        minigameController.gameObject.SetActive(false);
+        
+        if (success)
+        {
+            Debug.Log("Fish Caught!");
+            animator.Play("Player_Hooked");
+            currentState = FishingState.Ready;
+        }
+        else
+        {
+            Debug.Log("Fish Escaped!");
+            animator.Play("Player_Idle");
+            currentState = FishingState.Ready;
+        }
     }
 }
