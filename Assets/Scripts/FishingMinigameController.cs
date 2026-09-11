@@ -95,12 +95,14 @@ public class FishingMinigameController : MonoBehaviour
     {
         if (Keyboard.current.spaceKey.isPressed)
         {
-            catchBarVelocity += Mathf.Clamp(upwardAcceleration * Time.deltaTime, 0, maxSpeed);
+            catchBarVelocity += upwardAcceleration * Time.deltaTime;
         }
         else
         {
-            catchBarVelocity -= Mathf.Clamp(gravity * Time.deltaTime, 0, maxSpeed);
+            catchBarVelocity -= gravity * Time.deltaTime;
         }
+
+        catchBarVelocity = Mathf.Clamp(catchBarVelocity, 0f, maxSpeed);
 
         float currentY = catchBar.anchoredPosition.y;
         float desiredYPosition = currentY + catchBarVelocity * Time.deltaTime;
