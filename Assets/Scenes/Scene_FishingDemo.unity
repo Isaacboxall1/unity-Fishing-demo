@@ -2889,13 +2889,14 @@ GameObject:
   - component: {fileID: 1743324749}
   - component: {fileID: 1743324751}
   - component: {fileID: 1743324750}
+  - component: {fileID: 1743324752}
   m_Layer: 5
   m_Name: FishingMinigame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1743324749
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2955,6 +2956,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1743324748}
   m_CullTransparentMesh: 1
+--- !u!114 &1743324752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743324748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb28a4b65480ac74b80d971fc2d9e669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishingMinigameController
+  fish: {fileID: 312440162}
+  catchBar: {fileID: 2102511437}
+  fishingTrack: {fileID: 2075373520}
+  progressFill: {fileID: 339888274}
 --- !u!1 &1870308804
 GameObject:
   m_ObjectHideFlags: 0
@@ -3179,6 +3196,7 @@ MonoBehaviour:
   maxBiteDelay: 5
   biteIndicatorPrefab: {fileID: 6399689391672903390, guid: 025fafa574babad40be0dcce96a8076d, type: 3}
   fishingPoint: {fileID: 640272830}
+  minigameController: {fileID: 1743324752}
 --- !u!1 &1945760851
 GameObject:
   m_ObjectHideFlags: 0

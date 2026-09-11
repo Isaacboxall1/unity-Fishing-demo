@@ -34,6 +34,9 @@ public class FishingController : MonoBehaviour
     [SerializeField]
     private Transform fishingPoint;
 
+    [SerializeField]
+    private FishingMinigameController minigameController;
+
 
 
     /** Lifecycle Functions **/
@@ -109,5 +112,7 @@ public class FishingController : MonoBehaviour
             biteIndicator = null;
         }
         Debug.Log("Starting fishing minigame");
+        minigameController.gameObject.SetActive(true);
+        minigameController.StartMinigame();
     }
 }
