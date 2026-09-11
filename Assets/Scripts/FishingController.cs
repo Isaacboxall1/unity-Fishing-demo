@@ -1,15 +1,44 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 enum FishingState
 {
     Ready,
-    WaitingForBite
+    WaitingForBite,
+    FishHooked,
+    Minigame,
+    ShowingCatch
 }
+
 
 public class FishingController : MonoBehaviour
 {
-    void Update()
+    /** Member Variables **/
+
+    private FishingState currentState = FishingState.Ready;
+
+    private Animator animator;
+
+    private GameObject biteIndicator;
+
+    [SerializeField]
+    private float minBiteDelay = 2f;
+
+    [SerializeField]
+    private float maxBiteDelay = 5f;
+
+    [SerializeField]
+    private GameObject biteIndicatorPrefab;
+
+    [SerializeField]
+    private Transform fishingPoint;
+
+
+
+    /** Lifecycle Functions **/
+
+    private void Update()
     {
         if (Keyboard.current.eKey.wasPressedThisFrame)
         {
@@ -21,6 +50,8 @@ public class FishingController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    /** Private Helpers **/
+
     private void HandleInteract()
     {
         switch (currentState)
@@ -29,6 +60,7 @@ public class FishingController : MonoBehaviour
                 {
                     currentState = FishingState.WaitingForBite;
                     animator.Play("Player_Fishing");
+                    StartCoroutine(WaitForBite());
                     break;
                 }
             case FishingState.WaitingForBite:
@@ -42,7 +74,20 @@ public class FishingController : MonoBehaviour
         }
     }
 
-    FishingState currentState = FishingState.Ready;
+    private IEnumerator WaitForBite()
+    {
+        float waitTime = Random.Range(minBiteDelay, maxBiteDelay);
 
-    private Animator animator;
+        yield return new WaitForSeconds(waitTime);
+
+        HandleFishBite();
+    }
+
+    private void HandleFishBite()
+    {
+        Debug.Log("Fish Hooked!");
+        currentState = FishingState.FishHooked;        
+
+        biteIndicator = Instantiate(biteIndicatorPrefab, fishingPoint.position, Quaternion.identity);
+    }
 }
