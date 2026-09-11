@@ -58,13 +58,16 @@ public class FishingController : MonoBehaviour
         {
             case FishingState.Ready:
                 {
-                    currentState = FishingState.WaitingForBite;
-                    animator.Play("Player_Fishing");
-                    StartCoroutine(WaitForBite());
+                    StartFishing();
                     break;
                 }
             case FishingState.WaitingForBite:
                 {
+                    break;
+                }
+            case FishingState.FishHooked:
+                {
+                    StartMinigame();
                     break;
                 }
             default:
@@ -72,6 +75,13 @@ public class FishingController : MonoBehaviour
                     break;
                 }
         }
+    }
+
+    private void StartFishing()
+    {
+        currentState = FishingState.WaitingForBite;
+        animator.Play("Player_Fishing");
+        StartCoroutine(WaitForBite());
     }
 
     private IEnumerator WaitForBite()
@@ -89,5 +99,15 @@ public class FishingController : MonoBehaviour
         currentState = FishingState.FishHooked;        
 
         biteIndicator = Instantiate(biteIndicatorPrefab, fishingPoint.position, Quaternion.identity);
+    }
+
+    private void StartMinigame()
+    {
+        if (biteIndicator != null)
+        {
+            Destroy(biteIndicator);
+            biteIndicator = null;
+        }
+        Debug.Log("Starting fishing minigame");
     }
 }
