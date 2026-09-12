@@ -7,7 +7,11 @@ public class FishInventory : MonoBehaviour
 
     private Dictionary<FishDefinition, int> fishInventory = new();
 
+
+
     /** Public Methods **/
+
+    public IReadOnlyDictionary<FishDefinition, int> Inventory => fishInventory;
     public void AddFish(FishDefinition fish)
     {
         if (fishInventory.ContainsKey(fish))
