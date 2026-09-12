@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishDefinition
   displayName: Octopus
   sprite: {fileID: -7616478757336561107, guid: da718f59c4294124981b53d6cb047735, type: 3}
-  fishMoveSpeed: 400
-  minTargetChangeDelay: 1
+  fishMoveSpeed: 600
+  minTargetChangeDelay: 0.5
   maxTargetChangeDelay: 1.5
-  progressGainRate: 0.1
-  progressLossRate: 0.15
+  progressGainRate: 0.3
+  progressLossRate: 0.1
