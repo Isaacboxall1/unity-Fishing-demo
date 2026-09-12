@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System;
 
 enum FishingState
 {
@@ -16,17 +17,16 @@ public class FishingController : MonoBehaviour
 {
     /** Member Variables **/
 
-    private FishingState currentState = FishingState.Ready;
-
-    private Animator animator;
-
-    private GameObject biteIndicator;
+    
 
     [SerializeField]
     private float minBiteDelay = 2f;
 
     [SerializeField]
     private float maxBiteDelay = 5f;
+
+    [SerializeField]
+    private FishDefinition[] fishPool;
 
     [SerializeField]
     private GameObject biteIndicatorPrefab;
@@ -37,7 +37,15 @@ public class FishingController : MonoBehaviour
     [SerializeField]
     private FishingMinigameController minigameController;
 
+    /** Private Variables **/
 
+    private FishingState currentState = FishingState.Ready;
+
+    private Animator animator;
+
+    private GameObject biteIndicator;
+
+    private FishDefinition currentFish;
 
     /** Lifecycle Functions **/
 
@@ -82,6 +90,7 @@ public class FishingController : MonoBehaviour
 
     private void StartFishing()
     {
+        ChooseRandomFish();
         currentState = FishingState.WaitingForBite;
         animator.Play("Player_Fishing");
         StartCoroutine(WaitForBite());
@@ -89,7 +98,7 @@ public class FishingController : MonoBehaviour
 
     private IEnumerator WaitForBite()
     {
-        float waitTime = Random.Range(minBiteDelay, maxBiteDelay);
+        float waitTime = UnityEngine.Random.Range(minBiteDelay, maxBiteDelay);
 
         yield return new WaitForSeconds(waitTime);
 
@@ -124,7 +133,7 @@ public class FishingController : MonoBehaviour
         
         if (success)
         {
-            Debug.Log("Fish Caught!");
+            Debug.Log(currentFish.DisplayName + " Caught!");
             animator.Play("Player_Hooked");
             currentState = FishingState.Ready;
         }
@@ -134,5 +143,11 @@ public class FishingController : MonoBehaviour
             animator.Play("Player_Idle");
             currentState = FishingState.Ready;
         }
+    }
+
+    private void ChooseRandomFish()
+    {
+        Int32 ChosenIndex = UnityEngine.Random.Range(0, fishPool.Length);
+        currentFish = fishPool[ChosenIndex];
     }
 }
