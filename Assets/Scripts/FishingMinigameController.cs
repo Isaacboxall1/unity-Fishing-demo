@@ -77,6 +77,11 @@ public class FishingMinigameController : MonoBehaviour
     }
 
     /** Public Methods **/
+
+    public float CatchProgress => catchProgress;
+
+    public bool IsMinigameActive => isMinigameActive;
+
     public void StartMinigame()
     {
         fish.anchoredPosition = new Vector2(0f, 0f);
