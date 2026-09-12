@@ -17,8 +17,6 @@ public class FishingController : MonoBehaviour
 {
     /** Member Variables **/
 
-    
-
     [SerializeField]
     private float minBiteDelay = 2f;
 
@@ -43,6 +41,8 @@ public class FishingController : MonoBehaviour
 
     private Animator animator;
 
+    private FishInventory fishInventory;
+
     private GameObject biteIndicator;
 
     private FishDefinition currentFish;
@@ -59,6 +59,7 @@ public class FishingController : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        fishInventory = GetComponent<FishInventory>();
     }
 
     /** Private Helpers **/
@@ -90,7 +91,11 @@ public class FishingController : MonoBehaviour
 
     private void StartFishing()
     {
-        ChooseRandomFish();
+        if (!ChooseRandomFish())
+        {
+            return;
+        }
+
         currentState = FishingState.WaitingForBite;
         animator.Play("Player_Fishing");
         StartCoroutine(WaitForBite());
@@ -120,10 +125,11 @@ public class FishingController : MonoBehaviour
             Destroy(biteIndicator);
             biteIndicator = null;
         }
-        Debug.Log("Starting fishing minigame");
+
+        minigameController.MinigameFinished += HandleMinigameFinished;
+
         minigameController.gameObject.SetActive(true);
         minigameController.StartMinigame();
-        minigameController.MinigameFinished += HandleMinigameFinished;
 
     }
     private void HandleMinigameFinished(bool success)
@@ -133,21 +139,31 @@ public class FishingController : MonoBehaviour
         
         if (success)
         {
-            Debug.Log(currentFish.DisplayName + " Caught!");
+            fishInventory.AddFish(currentFish);
+            Debug.Log(currentFish.DisplayName + " Caught! You now have: " + fishInventory.GetQuantity(currentFish));
             animator.Play("Player_Hooked");
             currentState = FishingState.Ready;
+            currentFish = null;
         }
         else
         {
             Debug.Log("Fish Escaped!");
             animator.Play("Player_Idle");
             currentState = FishingState.Ready;
+            currentFish = null;
         }
     }
 
-    private void ChooseRandomFish()
+    private bool ChooseRandomFish()
     {
-        Int32 ChosenIndex = UnityEngine.Random.Range(0, fishPool.Length);
-        currentFish = fishPool[ChosenIndex];
+        if (fishPool.Length == 0)
+        {
+            Debug.LogError("Fish Pool Is Empty - Aborting ChooseRandomFish");
+            return false;
+        }
+
+        Int32 chosenIndex = UnityEngine.Random.Range(0, fishPool.Length);
+        currentFish = fishPool[chosenIndex];
+        return true;
     }
 }

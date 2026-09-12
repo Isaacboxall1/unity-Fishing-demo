@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2af0eeebbd51641b866470c97d0a88, type: 3}
   m_Name: Fish_PufferFish
   m_EditorClassIdentifier: Assembly-CSharp::FishDefinition
-  displayName: 
-  sprite: {fileID: 0}
+  displayName: PufferFish
+  sprite: {fileID: -4506424999423492572, guid: 31281a3a0dcedb044859eff8c27ae9b8, type: 3}

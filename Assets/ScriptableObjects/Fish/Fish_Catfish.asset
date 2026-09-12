@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2af0eeebbd51641b866470c97d0a88, type: 3}
   m_Name: Fish_Catfish
   m_EditorClassIdentifier: Assembly-CSharp::FishDefinition
-  displayName: 
-  sprite: {fileID: 0}
+  displayName: Catfish
+  sprite: {fileID: -376213808251980859, guid: 7ba2d90d3c17a87418fbdd8c66b52bd8, type: 3}

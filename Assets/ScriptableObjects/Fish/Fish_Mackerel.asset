@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2af0eeebbd51641b866470c97d0a88, type: 3}
   m_Name: Fish_Mackerel
   m_EditorClassIdentifier: Assembly-CSharp::FishDefinition
-  displayName: 
-  sprite: {fileID: 0}
+  displayName: Mackerel
+  sprite: {fileID: 3482111436017579232, guid: 1a2bfc48afa3b4945b2b6877e21ab625, type: 3}

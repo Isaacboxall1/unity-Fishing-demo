@@ -2977,7 +2977,7 @@ MonoBehaviour:
   maxSpeed: 350
   fishMoveSpeed: 200
   minTargetChangeDelay: 0.5
-  MaxTargetChangeDelay: 1.5
+  maxTargetChangeDelay: 1.5
   progressGainRate: 0.25
   progressLossRate: 0.15
 --- !u!1 &1870308804
@@ -3084,6 +3084,7 @@ GameObject:
   - component: {fileID: 1889014221}
   - component: {fileID: 1889014220}
   - component: {fileID: 1889014223}
+  - component: {fileID: 1889014224}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -3202,9 +3203,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishingController
   minBiteDelay: 2
   maxBiteDelay: 5
+  fishPool:
+  - {fileID: 11400000, guid: c95b974cceb053249aef84c3da434a26, type: 2}
+  - {fileID: 11400000, guid: ffade9c0083545546af08416318eadb9, type: 2}
+  - {fileID: 11400000, guid: d6074e41702cd12409fcdf09fb04af74, type: 2}
+  - {fileID: 11400000, guid: d9cab75c7431bbd4fa7dbab5fd87fb78, type: 2}
   biteIndicatorPrefab: {fileID: 6399689391672903390, guid: 025fafa574babad40be0dcce96a8076d, type: 3}
   fishingPoint: {fileID: 640272830}
   minigameController: {fileID: 1743324752}
+--- !u!114 &1889014224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889014219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acb11d9a059f3164fab9e799c2a88476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishInventory
 --- !u!1 &1945760851
 GameObject:
   m_ObjectHideFlags: 0

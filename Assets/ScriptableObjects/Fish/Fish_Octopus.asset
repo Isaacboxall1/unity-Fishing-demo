@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2af0eeebbd51641b866470c97d0a88, type: 3}
   m_Name: Fish_Octopus
   m_EditorClassIdentifier: Assembly-CSharp::FishDefinition
-  displayName: 
-  sprite: {fileID: 0}
+  displayName: Octopus
+  sprite: {fileID: -7616478757336561107, guid: da718f59c4294124981b53d6cb047735, type: 3}
