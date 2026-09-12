@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
-using System;
 
 enum FishingState
 {
@@ -68,6 +67,10 @@ public class FishingController : MonoBehaviour
         animator = GetComponent<Animator>();
         fishInventory = GetComponent<FishInventory>();
     }
+
+    /** Public Methods **/
+
+    public bool CanOpenInventory => currentState == FishingState.Ready;
 
     /** Private Helpers **/
 
@@ -138,6 +141,8 @@ public class FishingController : MonoBehaviour
             biteIndicator = null;
         }
 
+        currentState = FishingState.Minigame;
+
         minigameController.MinigameFinished += HandleMinigameFinished;
 
         minigameController.gameObject.SetActive(true);
@@ -152,11 +157,11 @@ public class FishingController : MonoBehaviour
         if (success)
         {
             fishInventory.AddFish(currentFish);
+            currentState = FishingState.Reeling;
             StartCoroutine(EnterCatchState());
         }
         else
         {
-            Debug.Log("Fish Escaped!");
             animator.Play("Player_Idle");
             currentState = FishingState.Ready;
             currentFish = null;
@@ -171,14 +176,14 @@ public class FishingController : MonoBehaviour
             return false;
         }
 
-        Int32 chosenIndex = UnityEngine.Random.Range(0, fishPool.Length);
+        int chosenIndex = UnityEngine.Random.Range(0, fishPool.Length);
         currentFish = fishPool[chosenIndex];
         return true;
     }
 
     private IEnumerator EnterCatchState()
     {
-        animator.Play("Player_Hooked");
+        animator.Play("Player_Reeling");
 
         yield return new WaitForSeconds(reelingDuration);
 

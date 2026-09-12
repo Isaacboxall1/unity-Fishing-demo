@@ -9,7 +9,7 @@ public class InventoryUIController : MonoBehaviour
     private FishInventory fishInventory;
 
     [SerializeField]
-    private GameObject InventoryPanel;
+    private GameObject inventoryPanel;
 
     [SerializeField]
     private RectTransform ContentPanel;
@@ -17,13 +17,22 @@ public class InventoryUIController : MonoBehaviour
     [SerializeField]
     private GameObject fishInventoryRowPrefab;
 
+    [SerializeField]
+    private FishingController fishingController;
+
     /** Lifecycle Functions **/
 
     private void Update()
     {
+        if (inventoryPanel.activeSelf && !fishingController.CanOpenInventory)
+        {
+            CloseInventory();
+            return;
+        }
+
         if (Keyboard.current.qKey.wasPressedThisFrame)
         {
-            if (!InventoryPanel.activeSelf)
+            if (!inventoryPanel.activeSelf)
             {
                 OpenInventory();
             }
@@ -36,7 +45,7 @@ public class InventoryUIController : MonoBehaviour
 
     private void OpenInventory()
     {
-        InventoryPanel.SetActive(true);
+        inventoryPanel.SetActive(true);
 
         foreach (Transform child in ContentPanel)
         {
@@ -55,6 +64,6 @@ public class InventoryUIController : MonoBehaviour
 
     private void CloseInventory()
     {
-        InventoryPanel.SetActive(false);
+        inventoryPanel.SetActive(false);
     }
 }
