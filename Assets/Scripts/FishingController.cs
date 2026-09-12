@@ -41,6 +41,9 @@ public class FishingController : MonoBehaviour
     [SerializeField]
     private CatchPopupController catchPopupController;
 
+    [SerializeField]
+    private FishingLineController fishingLineController;
+
     /** Private Variables **/
 
     private FishingState currentState = FishingState.Ready;
@@ -124,6 +127,7 @@ public class FishingController : MonoBehaviour
             return;
         }
 
+        fishingLineController.ShowLine();
         currentState = FishingState.WaitingForBite;
         animator.Play("Player_Fishing");
         StartCoroutine(WaitForBite());
@@ -166,6 +170,8 @@ public class FishingController : MonoBehaviour
     {
         minigameController.MinigameFinished -= HandleMinigameFinished;
         minigameController.gameObject.SetActive(false);
+
+        fishingLineController.HideLine();
         
         if (success)
         {

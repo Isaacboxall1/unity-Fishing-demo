@@ -29,6 +29,18 @@ public class FishingLineController : MonoBehaviour
         UpdateLine();
     }
 
+    /** Public Methods **/
+
+    public void ShowLine()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void HideLine()
+    {
+        gameObject.SetActive(false);
+    }
+
     /** Private Helpers **/
 
     private void UpdateLine()
