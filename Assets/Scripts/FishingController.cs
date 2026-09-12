@@ -9,6 +9,7 @@ enum FishingState
     WaitingForBite,
     FishHooked,
     Minigame,
+    Reeling,
     ShowingCatch
 }
 
@@ -24,6 +25,9 @@ public class FishingController : MonoBehaviour
     private float maxBiteDelay = 5f;
 
     [SerializeField]
+    private float reelingDuration = 1f;
+
+    [SerializeField]
     private FishDefinition[] fishPool;
 
     [SerializeField]
@@ -34,6 +38,9 @@ public class FishingController : MonoBehaviour
 
     [SerializeField]
     private FishingMinigameController minigameController;
+
+    [SerializeField]
+    private CatchPopupController catchPopupController;
 
     /** Private Variables **/
 
@@ -80,6 +87,11 @@ public class FishingController : MonoBehaviour
             case FishingState.FishHooked:
                 {
                     StartMinigame();
+                    break;
+                }
+            case FishingState.ShowingCatch:
+                {
+                    FinishCatch();
                     break;
                 }
             default:
@@ -140,10 +152,7 @@ public class FishingController : MonoBehaviour
         if (success)
         {
             fishInventory.AddFish(currentFish);
-            Debug.Log(currentFish.DisplayName + " Caught! You now have: " + fishInventory.GetQuantity(currentFish));
-            animator.Play("Player_Hooked");
-            currentState = FishingState.Ready;
-            currentFish = null;
+            StartCoroutine(EnterCatchState());
         }
         else
         {
@@ -165,5 +174,23 @@ public class FishingController : MonoBehaviour
         Int32 chosenIndex = UnityEngine.Random.Range(0, fishPool.Length);
         currentFish = fishPool[chosenIndex];
         return true;
+    }
+
+    private IEnumerator EnterCatchState()
+    {
+        animator.Play("Player_Hooked");
+
+        yield return new WaitForSeconds(reelingDuration);
+
+        catchPopupController.ShowCatch(currentFish);
+        currentState = FishingState.ShowingCatch;
+    }
+
+    private void FinishCatch()
+    {
+        catchPopupController.Hide();
+        currentFish = null;
+        animator.Play("Player_Idle");
+        currentState = FishingState.Ready;
     }
 }
