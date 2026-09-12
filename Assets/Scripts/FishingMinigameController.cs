@@ -35,23 +35,6 @@ public class FishingMinigameController : MonoBehaviour
     [SerializeField]
     private float maxSpeed = 350f;
 
-    /** Fish Settings **/
-
-    [SerializeField]
-    private float fishMoveSpeed = 200f;
-
-    [SerializeField]
-    private float minTargetChangeDelay = 0.5f;
-
-    [SerializeField]
-    private float maxTargetChangeDelay = 1.5f;
-
-    [SerializeField]
-    private float progressGainRate = 0.25f;
-
-    [SerializeField]
-    private float progressLossRate = 0.15f;
-
     /** Private Variables **/
 
     private float catchBarVelocity = 0f;
@@ -61,6 +44,8 @@ public class FishingMinigameController : MonoBehaviour
     private bool isMinigameActive = false;
 
     private float catchProgress = 0.5f;
+
+    private FishDefinition currentFish;
 
     /** Lifecycle Functions **/
 
@@ -72,7 +57,7 @@ public class FishingMinigameController : MonoBehaviour
         }
 
         UpdateCatchBar();
-        UpdateFish();
+        UpdateFishPosition();
         UpdateCatchProgress();
     }
 
@@ -82,8 +67,10 @@ public class FishingMinigameController : MonoBehaviour
 
     public bool IsMinigameActive => isMinigameActive;
 
-    public void StartMinigame()
+    public void StartMinigame(FishDefinition fishDefinition)
     {
+        currentFish = fishDefinition;
+
         fish.anchoredPosition = new Vector2(0f, 0f);
         catchBar.anchoredPosition = new Vector2(0f, 0f);
         catchBarVelocity = 0f;
@@ -97,6 +84,7 @@ public class FishingMinigameController : MonoBehaviour
 
     public void StopMinigame()
     {
+        currentFish = null;
         isMinigameActive = false;
     }
 
@@ -135,21 +123,21 @@ public class FishingMinigameController : MonoBehaviour
         catchBar.anchoredPosition = new Vector2(catchBar.anchoredPosition.x, newY);
     }
 
-    private void UpdateFish()
+    private void UpdateFishPosition()
     {
         float currentFishY = fish.anchoredPosition.y;
-        float updatedFishY = Mathf.MoveTowards(currentFishY, fishTargetY, fishMoveSpeed * Time.deltaTime);
+        float updatedFishY = Mathf.MoveTowards(currentFishY, fishTargetY, currentFish.FishMoveSpeed * Time.deltaTime);
         fish.anchoredPosition = new Vector2(fish.anchoredPosition.x, updatedFishY);
     }
     private void UpdateCatchProgress()
     {
         if (IsFishInsideCatchBar())
         {
-            catchProgress += progressGainRate * Time.deltaTime;
+            catchProgress += currentFish.ProgressGainRate * Time.deltaTime;
         }
         else
         {
-            catchProgress -= progressLossRate * Time.deltaTime;
+            catchProgress -= currentFish.ProgressLossRate * Time.deltaTime;
         }
 
         catchProgress = Mathf.Clamp(catchProgress, 0f, 1f);
@@ -198,7 +186,7 @@ public class FishingMinigameController : MonoBehaviour
         {
             ChooseFishTarget();
 
-            float waitTime = UnityEngine.Random.Range(minTargetChangeDelay, maxTargetChangeDelay);
+            float waitTime = UnityEngine.Random.Range(currentFish.MinTargetChangeDelay, currentFish.MaxTargetChangeDelay);
 
             yield return new WaitForSeconds(waitTime);
         }

@@ -110,6 +110,8 @@ public class FishingController : MonoBehaviour
                 }
             case FishingState.FishHooked:
                 {
+                    StopCoroutine(biteWindowCoroutine);
+                    biteWindowCoroutine = null;
                     StartMinigame();
                     break;
                 }
@@ -169,7 +171,7 @@ public class FishingController : MonoBehaviour
         minigameController.MinigameFinished += HandleMinigameFinished;
 
         minigameController.gameObject.SetActive(true);
-        minigameController.StartMinigame();
+        minigameController.StartMinigame(currentFish);
 
     }
     private void HandleMinigameFinished(bool success)
@@ -244,7 +246,10 @@ public class FishingController : MonoBehaviour
             biteIndicator = null;
         }
 
+        fishingLineController.HideLine();
+        animator.Play("Player_Idle");
+        currentState = FishingState.Ready;
         currentFish = null;
-        StartFishing();
+        biteWindowCoroutine = null;
     }
 }

@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishDefinition
   displayName: Mackerel
   sprite: {fileID: 3482111436017579232, guid: 1a2bfc48afa3b4945b2b6877e21ab625, type: 3}
+  fishMoveSpeed: 350
+  minTargetChangeDelay: 0.5
+  maxTargetChangeDelay: 1.5
+  progressGainRate: 0.3
+  progressLossRate: 0.15

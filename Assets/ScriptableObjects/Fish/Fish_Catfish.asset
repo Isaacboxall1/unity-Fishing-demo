@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishDefinition
   displayName: Catfish
   sprite: {fileID: -376213808251980859, guid: 7ba2d90d3c17a87418fbdd8c66b52bd8, type: 3}
+  fishMoveSpeed: 150
+  minTargetChangeDelay: 1
+  maxTargetChangeDelay: 1.5
+  progressGainRate: 0.15
+  progressLossRate: 0.1
