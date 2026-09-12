@@ -12,7 +12,7 @@ public class InventoryUIController : MonoBehaviour
     private GameObject inventoryPanel;
 
     [SerializeField]
-    private RectTransform ContentPanel;
+    private RectTransform contentPanel;
 
     [SerializeField]
     private GameObject fishInventoryRowPrefab;
@@ -34,7 +34,10 @@ public class InventoryUIController : MonoBehaviour
         {
             if (!inventoryPanel.activeSelf)
             {
-                OpenInventory();
+                if (fishingController.CanOpenInventory)
+                {
+                    OpenInventory();
+                }
             }
             else
             {
@@ -47,14 +50,14 @@ public class InventoryUIController : MonoBehaviour
     {
         inventoryPanel.SetActive(true);
 
-        foreach (Transform child in ContentPanel)
+        foreach (Transform child in contentPanel)
         {
             Destroy(child.gameObject);
         }
 
         foreach (var entry in fishInventory.Inventory)
         {
-            GameObject instantiatedObject = Instantiate(fishInventoryRowPrefab, ContentPanel);
+            GameObject instantiatedObject = Instantiate(fishInventoryRowPrefab, contentPanel);
 
             FishInventoryRow inventoryRowComponent = instantiatedObject.GetComponent<FishInventoryRow>();
 

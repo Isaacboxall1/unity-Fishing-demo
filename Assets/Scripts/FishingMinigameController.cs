@@ -171,10 +171,10 @@ public class FishingMinigameController : MonoBehaviour
         return CalculateImageYBounds(fish);
     }
 
-    private Vector2 CalculateImageYBounds(RectTransform Image)
+    private Vector2 CalculateImageYBounds(RectTransform image)
     {
         float trackHeight = fishingTrack.rect.height / 2;
-        float imageHeight = Image.rect.height / 2;
+        float imageHeight = image.rect.height / 2;
         float maxY = trackHeight - imageHeight;
         float minY = -maxY;
 

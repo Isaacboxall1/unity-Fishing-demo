@@ -5,9 +5,7 @@ public class FishInventory : MonoBehaviour
 {
     /** Private Variables **/
 
-    private Dictionary<FishDefinition, int> fishInventory = new();
-
-
+    private readonly Dictionary<FishDefinition, int> fishInventory = new();
 
     /** Public Methods **/
 

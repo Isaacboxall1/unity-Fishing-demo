@@ -68,6 +68,19 @@ public class FishingController : MonoBehaviour
         fishInventory = GetComponent<FishInventory>();
     }
 
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+
+        if (biteIndicator != null)
+        {
+            Destroy(biteIndicator);
+            biteIndicator = null;
+        }
+
+        minigameController.MinigameFinished -= HandleMinigameFinished;
+    }
+
     /** Public Methods **/
 
     public bool CanOpenInventory => currentState == FishingState.Ready;
