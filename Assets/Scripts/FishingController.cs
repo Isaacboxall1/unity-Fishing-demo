@@ -27,6 +27,9 @@ public class FishingController : MonoBehaviour
     private float reelingDuration = 1f;
 
     [SerializeField]
+    private float biteWindowDuration = 1.5f;
+
+    [SerializeField]
     private FishDefinition[] fishPool;
 
     [SerializeField]
@@ -55,6 +58,8 @@ public class FishingController : MonoBehaviour
     private GameObject biteIndicator;
 
     private FishDefinition currentFish;
+
+    private Coroutine biteWindowCoroutine;
 
     /** Lifecycle Functions **/
 
@@ -144,10 +149,11 @@ public class FishingController : MonoBehaviour
 
     private void HandleFishBite()
     {
-        Debug.Log("Fish Hooked!");
         currentState = FishingState.FishHooked;        
 
         biteIndicator = Instantiate(biteIndicatorPrefab, fishingPoint.position, Quaternion.identity);
+
+        biteWindowCoroutine = StartCoroutine(WaitForHookInput());
     }
 
     private void StartMinigame()
@@ -216,5 +222,29 @@ public class FishingController : MonoBehaviour
         currentFish = null;
         animator.Play("Player_Idle");
         currentState = FishingState.Ready;
+    }
+
+    private IEnumerator WaitForHookInput()
+    {
+        yield return new WaitForSeconds(biteWindowDuration);
+
+        if (currentState != FishingState.FishHooked)
+        {
+            yield break;
+        }
+
+        HandleMissedBite();
+    }
+
+    private void HandleMissedBite()
+    {
+        if (biteIndicator != null)
+        {
+            Destroy(biteIndicator);
+            biteIndicator = null;
+        }
+
+        currentFish = null;
+        StartFishing();
     }
 }
