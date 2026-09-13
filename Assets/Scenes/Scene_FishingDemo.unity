@@ -6469,7 +6469,6 @@ MonoBehaviour:
   fishPool:
   - {fileID: 11400000, guid: c95b974cceb053249aef84c3da434a26, type: 2}
   - {fileID: 11400000, guid: ffade9c0083545546af08416318eadb9, type: 2}
-  - {fileID: 11400000, guid: d6074e41702cd12409fcdf09fb04af74, type: 2}
   - {fileID: 11400000, guid: d9cab75c7431bbd4fa7dbab5fd87fb78, type: 2}
   biteIndicatorPrefab: {fileID: 6399689391672903390, guid: 025fafa574babad40be0dcce96a8076d, type: 3}
   fishingPoint: {fileID: 640272830}
