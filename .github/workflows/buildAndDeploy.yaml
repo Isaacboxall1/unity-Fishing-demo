@@ -18,8 +18,6 @@ jobs:
       matrix:
         projectPath:
           - ./
-        unityVersion:
-          - 2022.3.12f1
         targetPlatform:
           - WebGL # Must be valid options for Unity: https://docs.unity3d.com/ScriptReference/BuildTarget.html
     steps:
@@ -42,9 +40,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ env.PROJECT_NAME }}-${{ matrix.unityVersion }}-${{ matrix.targetPlatform }}
+          key: Library-${{ env.PROJECT_NAME }}-${{ matrix.targetPlatform }}-${{ hashFiles('ProjectSettings/ProjectVersion.txt') }}
           restore-keys: |
-            Library-${{ env.PROJECT_NAME }}-${{ matrix.unityVersion }}-
+            Library-${{ env.PROJECT_NAME }}-${{ matrix.targetPlatform }}-
             Library-${{ env.PROJECT_NAME }}-
             Library-
       # We use Game CI (https://game.ci/) to buld the project
@@ -56,7 +54,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           projectPath: ${{ matrix.projectPath }}
-          unityVersion: ${{ matrix.unityVersion }}
+          unityVersion: auto
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: ${{ env.PROJECT_NAME }}
           buildsPath: build/${{ matrix.unityVersion }}
