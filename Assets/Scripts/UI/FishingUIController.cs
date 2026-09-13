@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -11,6 +12,9 @@ public class FishingUIController : MonoBehaviour
 
     [SerializeField]
     private TMP_Text inventoryPrompt;
+
+    [SerializeField]
+    private float fishGotAwayMessageTime = 1f;
 
 
     private InventoryUIController inventoryUIController;
@@ -68,5 +72,24 @@ public class FishingUIController : MonoBehaviour
     public void HideInventoryPrompt()
     {
         inventoryPrompt.gameObject.SetActive(false);
+    }
+
+    public void ShowFishGotAwayMessage()
+    {
+        statusMessage.text = "Fish got away :(";
+        statusMessage.gameObject.SetActive(true);
+        StartCoroutine(HandleFishGotAwayLifetime());
+    }
+
+    public void HideFishGotAwayMessage()
+    {
+        statusMessage.gameObject.SetActive(false);
+    }
+
+    private IEnumerator HandleFishGotAwayLifetime()
+    {
+        yield return new WaitForSeconds(fishGotAwayMessageTime);
+
+        HideFishGotAwayMessage();
     }
 }

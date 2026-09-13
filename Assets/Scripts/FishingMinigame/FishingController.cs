@@ -140,6 +140,7 @@ public class FishingController : MonoBehaviour
         }
 
         fishingUIController.HideInteractionPrompt();
+        fishingUIController.HideFishGotAwayMessage();
         fishingLineController.ShowLine();
         currentState = FishingState.WaitingForBite;
         animator.Play("Player_Fishing");
@@ -200,6 +201,7 @@ public class FishingController : MonoBehaviour
         }
         else
         {
+            fishingUIController.ShowFishGotAwayMessage();
             SetPlayerReady();
         }
     }
@@ -247,6 +249,7 @@ public class FishingController : MonoBehaviour
 
     private void HandleMissedBite()
     {
+        fishingUIController.ShowFishGotAwayMessage();
         SetPlayerReady();
     }
 
