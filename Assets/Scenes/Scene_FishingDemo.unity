@@ -4668,7 +4668,7 @@ MonoBehaviour:
   minigameController: {fileID: 1743324752}
   catchPopupController: {fileID: 1704976862}
   fishingLineController: {fileID: 1662632567}
-  fishingUIController: {fileID: 0}
+  fishingUIController: {fileID: 2007872308}
 --- !u!114 &1889014224
 MonoBehaviour:
   m_ObjectHideFlags: 0

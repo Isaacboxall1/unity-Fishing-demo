@@ -46,6 +46,11 @@ public class InventoryUIController : MonoBehaviour
         }
     }
 
+    public bool CanOpenInventory()
+    {
+        return !inventoryPanel.activeSelf && fishingController.CanOpenInventory && fishInventory.Inventory.Count >= 1;
+    }
+
     private void OpenInventory()
     {
         inventoryPanel.SetActive(true);

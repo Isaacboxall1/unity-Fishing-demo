@@ -77,6 +77,8 @@ public class FishingController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         fishInventory = GetComponent<FishInventory>();
+
+        fishingUIController.ShowCastPrompt();
     }
 
     private void OnDisable()

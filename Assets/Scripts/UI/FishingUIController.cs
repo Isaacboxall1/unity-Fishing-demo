@@ -12,16 +12,29 @@ public class FishingUIController : MonoBehaviour
     [SerializeField]
     private TMP_Text inventoryPrompt;
 
+
+    private InventoryUIController inventoryUIController;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        inventoryUIController = GetComponent<InventoryUIController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (inventoryUIController != null)
+        {
+            if (inventoryUIController.CanOpenInventory())
+            {
+                ShowInventoryPrompt();
+            }
+            else
+            {
+                HideInventoryPrompt();
+            }
+        }
     }
 
     public void ShowCastPrompt()
@@ -45,5 +58,15 @@ public class FishingUIController : MonoBehaviour
     public void HideInteractionPrompt()
     {
         interactionPrompt.gameObject.SetActive(false);
+    }
+
+    public void ShowInventoryPrompt()
+    {
+        inventoryPrompt.gameObject.SetActive(true);
+    }
+
+    public void HideInventoryPrompt()
+    {
+        inventoryPrompt.gameObject.SetActive(false);
     }
 }
