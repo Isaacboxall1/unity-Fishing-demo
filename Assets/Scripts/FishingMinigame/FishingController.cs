@@ -47,6 +47,9 @@ public class FishingController : MonoBehaviour
     [SerializeField]
     private FishingLineController fishingLineController;
 
+    [SerializeField]
+    private FishingUIController fishingUIController;
+
     /** Private Variables **/
 
     private FishingState currentState = FishingState.Ready;
@@ -134,6 +137,7 @@ public class FishingController : MonoBehaviour
             return;
         }
 
+        fishingUIController.HideInteractionPrompt();
         fishingLineController.ShowLine();
         currentState = FishingState.WaitingForBite;
         animator.Play("Player_Fishing");
@@ -151,6 +155,8 @@ public class FishingController : MonoBehaviour
 
     private void HandleFishBite()
     {
+        fishingUIController.ShowCatchPrompt();
+
         currentState = FishingState.FishHooked;        
 
         biteIndicator = Instantiate(biteIndicatorPrefab, fishingPoint.position, Quaternion.identity);
@@ -166,6 +172,8 @@ public class FishingController : MonoBehaviour
             biteIndicator = null;
         }
 
+        fishingUIController.ShowMinigamePrompt();
+
         currentState = FishingState.Minigame;
 
         minigameController.MinigameFinished += HandleMinigameFinished;
@@ -180,6 +188,7 @@ public class FishingController : MonoBehaviour
         minigameController.gameObject.SetActive(false);
 
         fishingLineController.HideLine();
+        fishingUIController.HideInteractionPrompt();
         
         if (success)
         {
@@ -189,9 +198,7 @@ public class FishingController : MonoBehaviour
         }
         else
         {
-            animator.Play("Player_Idle");
-            currentState = FishingState.Ready;
-            currentFish = null;
+            SetPlayerReady();
         }
     }
 
@@ -221,9 +228,7 @@ public class FishingController : MonoBehaviour
     private void FinishCatch()
     {
         catchPopupController.Hide();
-        currentFish = null;
-        animator.Play("Player_Idle");
-        currentState = FishingState.Ready;
+        SetPlayerReady();
     }
 
     private IEnumerator WaitForHookInput()
@@ -240,12 +245,18 @@ public class FishingController : MonoBehaviour
 
     private void HandleMissedBite()
     {
+        SetPlayerReady();
+    }
+
+    private void SetPlayerReady()
+    {
         if (biteIndicator != null)
         {
             Destroy(biteIndicator);
             biteIndicator = null;
         }
 
+        fishingUIController.ShowCastPrompt();
         fishingLineController.HideLine();
         animator.Play("Player_Idle");
         currentState = FishingState.Ready;
