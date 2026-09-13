@@ -24,19 +24,21 @@ jobs:
           - WebGL # Must be valid options for Unity: https://docs.unity3d.com/ScriptReference/BuildTarget.html
     steps:
       - name: Free disk space
-      uses: jlumbroso/free-disk-space@v1.3.1
-      with:
-        tool-cache: false
-        android: true
-        dotnet: true
-        haskell: true
-        large-packages: true
-        docker-images: true
-        swap-storage: true
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+      - name: Checkout repository
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       # Unity builds take some time, so we do some caching to make builds faster
+      - name: Restore Unity Library cache
       - uses: actions/cache@v4
         with:
           path: ${{ matrix.projectPath }}/Library
@@ -46,6 +48,7 @@ jobs:
             Library-${{ env.PROJECT_NAME }}-
             Library-
       # We use Game CI (https://game.ci/) to buld the project
+      - name: Build Unity project
       - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
